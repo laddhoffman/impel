@@ -1,0 +1,95 @@
+#!/bin/bash
+
+version=0.1
+
+# Introduction
+# This script shall read from elements in $data_dir as specified in the configuration file.
+#
+# Configuration
+# Default configuration file is conf/settings.conf but may be specified on command line with -c|--config)
+# The configuration file is a shell script an is interpreted as such.
+# Configuration options include:
+#  data_dir=/path/to/data/directory
+#  bin_dir=/path/to/bin/directory
+#  email_targets=(list of email targets for prompts)
+
+echo "impel version $version"
+
+# Initialize parameters
+data_dir=''
+bin_dir=''
+conf_file=''
+declare -a email_targets
+declare -a email_targets_sanitized
+
+# Read command line parameters
+while [[ "$#" -gt 0 ]]; do
+    if [[ "$1" == '-c' || "$1" == '--config' ]]; then
+        shift
+        conf_file="$1"
+    fi
+    shift
+done
+
+# Read configuration settings
+if [[ -z "$conf_file" ]]; then 
+    conf_file='conf/settings.conf'
+fi
+source "$conf_file" || exit 1
+
+# Load defaults if needed
+if [[ -z "$data_dir" ]]; then 
+    data_dir='data/'
+fi
+if [[ -z "$bin_dir" ]]; then 
+    bin_dir='bin/'
+fi
+
+# Remove trailing slashes
+data_dir=${data_dir%/}
+bin_dir=${bin_dir%/}
+
+# Load helper functions
+source "$bin_dir/functions.sh" || exit 1
+
+# Start doing some processing to prepare for work
+draw_line 50
+
+# Sanitize email addresses
+email_rx='^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]+$'
+for idx in ${!email_targets[@]}; do
+    email_target=${email_targets[$idx]}
+    if [[ ! "$email_target" =~ $email_rx ]]; then
+        echo >&2 "invalid email target '$email_target'"
+        continue
+    fi
+    # OK, email looks alright.
+    # TODO: not only sanitize emails, but verify as well
+    echo "email target: $email_target"
+    email_targets_sanitized[${#email_targets_sanitized[@]}]="$email_target"
+done
+
+if [[ -z "${email_targets_sanitized[@]}" ]]; then
+    echo >&2 "email_targets is empty; emails will NOT BE SENT"
+fi
+
+# We're prepared, now go to work!
+draw_line 50
+
+# Supported directory types are currently:
+#  watch
+#  activities
+#  expenses
+#  correspondence
+
+for dir in ${data_dir}/*; do
+    if [[ ! -d "$dir" ]]; then
+        continue
+    fi
+    # dir=$(basename "$dir")
+    echo "found directory: ${dir#$data_dir/}"
+
+    process_dir "$dir"
+
+    draw_line 50
+done
