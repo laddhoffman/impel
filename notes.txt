@@ -1,0 +1,24 @@
+notes about overall 'impel' system
+
+i found that 'correspondence' items will need to reference other documents.
+I also found that the proper place for pure thought files in this context was actually the directory above this one; just my base owncloud directory.
+perhaps _that_ is my data directory, and under that I can have:
+ correspondence
+ expenses
+ activities
+ watch
+
+the only problem with that is, those 4 are very specific, but the base directory is totally open-ended.
+So, i think this is the way it has to be.
+
+The user, the owner of the 'impel' data, must be responsible for granting access to, and keeping track of, relevant files.
+
+perhaps activities should be named actions? what is the meaningful difference, if any?
+
+Correspondence also happens to provide a list of contacts, essentially.
+Future and past are not quite the most useful distinctions when it comes to correspondence... the significance of both of these depends upon establishing the framework for the correspondence. much of this is derived from the past but it - how to say - flows seamlessly into the future.
+Where you are is a snapshot, encapsulating your representation of the past at that time as well as your intentions for the future. but, for one, these can be so highly in flux; and for another, the shape of the whole picture depends heavily upon new thought and new experience, including and especially, new input from the relevant contact(s).
+
+So: we organize correspondence primarily by individual (or group) with whom it takes place. Then, we need some kind of structural delineation; concepts relevant to your correspondence with this person.
+
+only then can past and future elements have particular meaning, I think, and be useful.

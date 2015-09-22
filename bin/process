@@ -82,13 +82,14 @@ draw_line 50
 #  expenses
 #  correspondence
 
-for dir in ${data_dir}/*; do
+for dir in "${data_dir}"/*; do
     if [[ ! -d "$dir" ]]; then
         continue
     fi
     # dir=$(basename "$dir")
     echo "found directory: ${dir#$data_dir/}"
 
+    declare dir_type='' # this can be inherited by children of the top level dir
     process_dir "$dir"
 
     draw_line 50
